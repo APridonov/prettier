@@ -26,6 +26,24 @@ public class PrettierApp {
     messageService.print(text.getCreatedDate().toString());
     messageService.print(dateString);
 
+    Document textDocument = new Document();
+    textDocument.put("value", text.getValue());
+    textDocument.put("createdDate", text.getCreatedDate());
+    textDocument.put("userName", text.getuserName());
+
+    MongoClient mongoClient = new MongoClient("localhost", 27000);
+    MongoDatabase prettier = mongoClient.getDatabase("prettier");
+    MongoCollection<Document> textMongoCollection = prettier.getCollection("text", Document.class);
+    textMongoCollection.insertOne(textDocument);
+
+    Document usersDocument = new Document();
+    usersDocument.put("firstname", "Amirlan");
+    usersDocument.put("lastname", "Pridonov");
+    MongoCollection<Document> usersMongoCollection = prettier.getCollection("users", Document.class);
+    usersMongoCollection.insertOne(usersDocument);
+
+
+    mongoClient.close();
   }
 
 }
